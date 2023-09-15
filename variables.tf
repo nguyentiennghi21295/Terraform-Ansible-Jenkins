@@ -22,3 +22,17 @@ variable main_instance_count {
     type = number
     default = 1
 }
+
+variable key_name {
+    type = string
+    
+}
+
+variable public_key_path {
+    type = string
+}
+
+variable "ssh-rsa" {
+  description = "The public SSH key"
+  type        = string
+}
