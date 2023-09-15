@@ -58,11 +58,11 @@ output "available_zones" {
 }
 
 resource "aws_subnet" "mtc_public_subnet" {
-    count = length(var.public_cidrs)
+    count = length(local.azs)
     vpc_id = aws_vpc.mtc_vpc.id
-    cidr_block = var.public_cidrs[count.index]
+    cidr_block = cidrsubnet(var.vpc_cidr, 8, count.index)
     map_public_ip_on_launch = true
-    availability_zone = locals.azs[count.index]
+    availability_zone = local.azs[count.index]
     
     tags = {
         Name = "mtc-public-${count.index + 1}"
@@ -70,11 +70,11 @@ resource "aws_subnet" "mtc_public_subnet" {
 }
 
 resource "aws_subnet" "mtc_private_subnet" {
-    count = length(var.private_cidrs)
+    count = length(local.azs)
     vpc_id = aws_vpc.mtc_vpc.id
-    cidr_block = var.private_cidrs[count.index]
+    cidr_block = cidrsubnet(var.vpc_cidr, 8, length(local.azs) + count.index)
     map_public_ip_on_launch = false
-    availability_zone = locals.azs[count.index]
+    availability_zone = local.azs[count.index]
     
     tags = {
         Name = "mtc-private-${count.index + 1}"
