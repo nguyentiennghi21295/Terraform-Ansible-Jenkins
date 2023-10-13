@@ -1,6 +1,6 @@
 ---
-- name: Install Grafana
-  hosts: localhost
+- name: Rempve Grafana
+  hosts: hosts
   become: yes
   
   tasks:
