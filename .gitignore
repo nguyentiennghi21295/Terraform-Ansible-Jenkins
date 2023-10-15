@@ -1,6 +1,5 @@
 *.pem
 # Ignore providers.tf file
-providers.tf
 
 # Ignore .terraform directory
 *.retry
