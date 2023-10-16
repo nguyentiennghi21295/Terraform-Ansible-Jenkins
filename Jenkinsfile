@@ -23,7 +23,7 @@ pipeline {
         }
         stage('EC2 Wait') {
             steps {
-                 sh 'aws ec2 wait instance-status-ok --region us-west-1'
+                 sh 'aws ec2 wait instance-status-ok --region eu-west-1'
             }
         }
         stage('Destroy') {
