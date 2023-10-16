@@ -1,0 +1,12 @@
+*.pem
+# Ignore providers.tf file
+
+# Ignore .terraform directory
+*.retry
+aws_hosts
+crash.log
+*.tfstate
+*.tfstate.*
+.terraform/
+*.io.key
+*.terraform.lock*

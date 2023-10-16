@@ -4,28 +4,15 @@
   become: yes
   
   tasks:
-  - name: Remove existing keys from keyring
-    ansible.builtin.apt_key:
-      id: "{{ item }}"
-      state: absent
-    loop:
-      - 5BA31D57EF5975CA
-      - 14EDB24CE3E1422E
-      
   - name: download apt key
-    ansible.builtin.get_url:
+    ansible.builtin.apt_key:
       url: https://pkg.jenkins.io/debian-stable/jenkins.io.key
-      dest: /tmp/jenkins.io.key
-      
-  - name: Add Jenkins GPG key using apt-key
-    ansible.builtin.command: apt-key add /tmp/jenkins.io.key
-      
+      state: present
   - name: Add Jenkins repo to sources.list
     ansible.builtin.apt_repository:
       repo: deb https://pkg.jenkins.io/debian-stable binary/
       state: present
       filename: jenkins
-      
   - name: Update apt cache and install jenkins
     apt:
       name: jenkins
