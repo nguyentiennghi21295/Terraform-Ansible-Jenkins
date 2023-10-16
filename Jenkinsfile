@@ -14,6 +14,5 @@ pipeline {
                 sh 'terraform plan -no-color'
             }
         }
-    
     }
 }
