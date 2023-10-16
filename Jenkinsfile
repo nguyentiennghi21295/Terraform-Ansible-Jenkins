@@ -26,7 +26,6 @@ pipeline {
                  sh 'aws ec2 wait instance-status-ok --region eu-west-1'
             }
         }
-        
         stage('Destroy') {
             steps {
                 sh 'terraform destroy -auto-approve -no-color'
