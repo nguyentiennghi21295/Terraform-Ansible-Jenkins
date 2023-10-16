@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         TF_IN_AUTOMATION = 'true'
-        AWS_SHARED_CREDENTIALS_FILES = ['/home/ubuntu/.aws/credentials']
+        AWS_SHARED_CREDENTIALS_FILE = '/home/ubuntu/.aws/credentials'
     }
     stages {
         stage('Init') {
