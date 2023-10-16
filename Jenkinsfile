@@ -2,58 +2,33 @@ pipeline {
     agent any
     environment {
         TF_IN_AUTOMATION = 'true'
-        TF_CLI_CONFIG_FILE = credentials('Terraform-cloud-secrets')
+        AWS_SHARED_CREDENTIALS_FILE='/home/ubuntu/.aws/credentials'
     }
     stages {
         stage('Init') {
             steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'AWS-creds'
-                ]]){
-                    sh 'ls'
-                    sh 'terraform init -no-color'
-                }
+                sh 'ls'
+                sh 'terraform init -no-color'
             }
         }
         stage('Plan') {
             steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'AWS-creds'
-                ]]){
-                    sh 'terraform plan -no-color'
-                }
+                sh 'terraform plan -no-color'
             }
         }
         stage('Apply') {
             steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'AWS-creds'
-                ]]){
-                    sh 'terraform apply -auto-approve -no-color'
-                }
+                sh 'terraform apply -auto-approve -no-color'
             }
         }
         stage('EC2 Wait') {
             steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'AWS-creds'
-                ]]){
-                    sh 'aws ec2 wait instance-status-ok --region eu-west-1'
-                }
+                 sh 'aws ec2 wait instance-status-ok --region us-west-1'
             }
         }
         stage('Destroy') {
             steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'AWS-creds'
-                ]]){
-                    sh 'terraform destroy -auto-approve -no-color'
-                }
+                sh 'terraform destroy -no-color'
             }
         }
     }
