@@ -7,3 +7,10 @@ sudo apt-get install jenkins
 sudo systemctl start jenkins
 sudo systemctl enable jenkins
 sudo systemctl status jenkins
+
+
+        stage('Ansible') {
+            steps{
+                ansiblePlaybook(credentialsId: 'ec2-ssh-key', inventory: 'aws_hosts', playbook: 'Playbooks/main-playbook.yml')
+            }
+        }
