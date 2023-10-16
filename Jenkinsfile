@@ -23,7 +23,7 @@ pipeline {
         }
         stage('Ansible') {
             steps{
-                ansiblePlaybook(credentialsId: 'ec2-ssh-key', inventory: 'aws_hosts', playbook: 'Playbooks/main-playbook.yml'
+                ansiblePlaybook(credentialsId: 'ec2-ssh-key', inventory: 'aws_hosts', playbook: 'Playbooks/main-playbook.yml')
             }
         }
         stage('EC2 Wait') {
