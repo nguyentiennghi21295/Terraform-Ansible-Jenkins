@@ -5,7 +5,7 @@ locals {
 data "aws_availability_zones" "available" {
   state = "available"
 }
-# variable vpc_cidr {}
+
 resource "random_id" "random" {
   byte_length = 2
 }
@@ -16,9 +16,6 @@ resource "aws_vpc" "mtc_vpc" {
   enable_dns_support   = true
   tags = {
     Name = "mtc_vpc-${random_id.random.dec}"
-  }
-  lifecycle {
-    create_before_destroy = true
   }
 }
 
@@ -46,15 +43,10 @@ resource "aws_route" "default_route" {
 
 resource "aws_default_route_table" "mtc_private_rt" {
   default_route_table_id = aws_vpc.mtc_vpc.default_route_table_id
-
+  depends_on            = [aws_vpc.mtc_vpc]
   tags = {
     Name = "mtc_private"
   }
-}
-
-output "available_zones" {
-  description = "Available Availability Zones"
-  value       = data.aws_availability_zones.available.names
 }
 
 resource "aws_subnet" "mtc_public_subnet" {
@@ -85,12 +77,14 @@ resource "aws_route_table_association" "mtc_pubic_assoc" {
   count          = length(local.azs)
   subnet_id      = aws_subnet.mtc_public_subnet.*.id[count.index]
   route_table_id = aws_route_table.mtc_public_rt.id
+  depends_on     = [aws_subnet.mtc_public_subnet]
 }
 
 resource "aws_security_group" "mtc_sg" {
   name        = "public_sg"
   description = "security group for public instances"
   vpc_id      = aws_vpc.mtc_vpc.id
+  depends_on  = [aws_vpc.mtc_vpc]
 }
 
 resource "aws_security_group_rule" "ingress_all" {
@@ -100,6 +94,7 @@ resource "aws_security_group_rule" "ingress_all" {
   protocol          = "-1"
   cidr_blocks       = [var.access_ip, var.cloud9_ip]
   security_group_id = aws_security_group.mtc_sg.id
+  depends_on        = [aws_security_group.mtc_sg]
 }
 
 resource "aws_security_group_rule" "egress_all" {
@@ -109,4 +104,10 @@ resource "aws_security_group_rule" "egress_all" {
   protocol          = "-1"
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.mtc_sg.id
+  depends_on        = [aws_security_group.mtc_sg]
+}
+
+output "available_zones" {
+  description = "Available Availability Zones"
+  value       = data.aws_availability_zones.available.names
 }
