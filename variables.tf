@@ -10,7 +10,7 @@ variable "access_ip" {
 
 variable "cloud9_ip" {
   type    = string
-  default = "99.81.176.239/32"
+  default = "63.32.87.24/32"
 }
 
 variable "main_instance_type" {
