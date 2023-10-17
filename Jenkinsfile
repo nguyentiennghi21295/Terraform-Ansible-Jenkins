@@ -28,7 +28,7 @@ pipeline {
         }
         stage('Echo') {
             steps {
-                 sh 'echo aws_hosts'
+                 sh 'cat aws_hosts'
             }
         }
         stage('Ansible') {
