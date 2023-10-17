@@ -26,7 +26,7 @@ pipeline {
                  sh 'aws ec2 wait instance-status-ok --region eu-west-1'
             }
         }
-        stage('EC2 Wait') {
+        stage('Echo') {
             steps {
                  sh 'echo aws_hosts'
             }
