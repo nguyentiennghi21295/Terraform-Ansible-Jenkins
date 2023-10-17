@@ -16,7 +16,6 @@ pipeline {
                 sh 'terraform plan -no-color'
             }
         }
-        stage('Validate Apply')
         stage('Apply') {
             steps {
                 sh 'terraform apply -auto-approve -no-color'
