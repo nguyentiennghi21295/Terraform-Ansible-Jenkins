@@ -26,6 +26,11 @@ pipeline {
                  sh 'aws ec2 wait instance-status-ok --region eu-west-1'
             }
         }
+        stage('EC2 Wait') {
+            steps {
+                 sh 'echo aws_hosts'
+            }
+        }
         stage('Ansible') {
             steps {
                 ansiblePlaybook(credentialsId: 'ec2-ssh-key', inventory: 'aws_hosts', playbook:'Playbooks/main-playbook.yml')
@@ -37,4 +42,5 @@ pipeline {
             }
         }
     }
+    
 }
