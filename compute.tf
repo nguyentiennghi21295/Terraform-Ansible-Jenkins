@@ -36,8 +36,10 @@ resource "aws_instance" "mtc_main" {
 
   provisioner "local-exec" {
    command = <<EOT
+   echo ${self.public_ip}
    ssh-keyscan ${self.public_ip} >> ~/.ssh/known_hosts
-   printf '\n${self.public_ip}' >> aws_hosts && aws ec2 wait instance-status-ok --instance-ids ${self.id} --region eu-west-1
+   printf '\n${self.public_ip}' >> aws_hosts
+   cat aws_hosts
   EOT  
   }
   provisioner "local-exec" {
