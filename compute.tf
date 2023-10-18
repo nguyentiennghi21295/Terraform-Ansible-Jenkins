@@ -34,13 +34,13 @@ resource "aws_instance" "mtc_main" {
     Name = "mtc-main-${random_id.mtc_node_id[count.index].dec}"
   }
 
-  provisioner "local-exec" {
-   command = "printf '\n${self.public_ip}' >> aws_hosts"
-  }
-  provisioner "local-exec" {
-    when    = destroy
-    command = "sed -i '/^[0-9]/d' aws_hosts"
-  }
+  # provisioner "local-exec" {
+  # command = "printf '\n${self.public_ip}' >> aws_hosts"
+  # }
+  # provisioner "local-exec" {
+  #   when    = destroy
+  #   command = "sed -i '/^[0-9]/d' aws_hosts"
+  # }
 }
 
 # resource "null_resource" "grafana_update" {
