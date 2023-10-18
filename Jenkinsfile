@@ -33,7 +33,7 @@ pipeline {
         }
         stage('Ansible') {
             steps {
-                ansiblePlaybook(credentialsId: 'ec2-ssh-key', inventory: 'aws_hosts', playbook:'Playbooks/main-playbook.yml')
+                sh 'ansible-playbook Playbooks/main-playbook.yml -i aws_hosts --private-key ~/.ssh/mtckey'
             }
         }    
         stage('Destroy') {
@@ -42,6 +42,12 @@ pipeline {
             }
         }
     }
-
+    post {
+        success {
+            echo 'Success!'
+        }
+        failure {
+            sh 'terraform destroy -auto-approve -no-color'
+        }
     
 }
