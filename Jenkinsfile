@@ -41,7 +41,7 @@ pipeline {
                 sh 'terraform destroy -auto-approve -no-color'
             }
         }
-    }
+    
     post {
         success {
             echo 'Success!'
@@ -49,5 +49,5 @@ pipeline {
         failure {
             sh 'terraform destroy -auto-approve -no-color'
         }
-    
+    }
 }
