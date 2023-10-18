@@ -8,6 +8,7 @@ pipeline {
         stage('Init') {
             steps {
                 sh 'ls'
+                sh 'cat $BRANCH_NAME.tfvars'
                 sh 'terraform init -no-color'
             }
         }
@@ -16,9 +17,22 @@ pipeline {
                 sh 'terraform plan -no-color'
             }
         }
+        stage('Validate Apply') {
+            when {
+                beforeInput true
+                branch "dev"
+            }
+            input {
+                message "Do you want to apply this plan?"
+                ok "Apply this plan
+            }
+            steps {
+                echo 'Apply Accepted'
+            }
+        }
         stage('Apply') {
             steps {
-                sh 'terraform apply -auto-approve -no-color'
+                sh 'terraform apply -auto-approve -no-color -var-file="$BRANCH_NAME.tfvars"'
             }
         }
         stage('EC2 Wait') {
@@ -31,14 +45,36 @@ pipeline {
                  sh 'cat aws_hosts'
             }
         }
+        stage('Validate Ansible') {
+            when {
+                beforeInput true
+                branch "dev"
+            }
+            input {
+                message "Do you want to run Ansible?"
+                ok "Run Ansible"
+            }
+            steps {
+                echo 'Ansible Approved'
+            }
+        }
         stage('Ansible') {
             steps {
-                sh 'ansible-playbook Playbooks/main-playbook.yml -i aws_hosts --private-key ~/.ssh/mtckey'
+                sh 'ansible-playbook Playbooks/main-playbook.yml -i aws_hosts --private-key /home/ubuntu/.ssh/mtckey'
             }
-        }    
+        }
+        stage('Validate Destroy') {
+            input {
+                message "Do you destroy all the things?"
+                ok "Destroy!"
+            }
+            steps {
+                echo 'Destroy Accepted'
+            }    
+        }
         stage('Destroy') {
             steps {
-                sh 'terraform destroy -auto-approve -no-color'
+                sh 'terraform destroy -auto-approve -no-color -var-file="$BRANCH_NAME.tfvars"'
             }
         }
         }
@@ -47,7 +83,7 @@ pipeline {
             echo 'Success!'
         }
         failure {
-            sh 'terraform destroy -auto-approve -no-color'
+            sh 'terraform destroy -auto-approve -no-color -var-file="$BRANCH_NAME.tfvars"'
         }
     }
     
