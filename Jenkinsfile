@@ -33,7 +33,7 @@ pipeline {
         }
         stage('Ansible') {
             steps {
-                ansiblePlaybook(credentialsId: 'ec2_ssh_key', inventory: 'aws_hosts', playbook:'Playbooks/main-playbook.yml')
+                ansiblePlaybook(credentialsId: 'ec2-ssh-keyv2', inventory: 'aws_hosts', playbook:'Playbooks/main-playbook.yml')
             }
         }    
         stage('Destroy') {
