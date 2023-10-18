@@ -42,13 +42,6 @@ pipeline {
             }
         }
     }
-    post {
-        success {
-            echo 'Success!'
-        }
-        failure {
-            sh 'terraform destroy -auto-approve -no-color'
-        }
-    }
+
     
 }
