@@ -50,4 +50,5 @@ pipeline {
             sh 'terraform destroy -auto-approve -no-color'
         }
     }
+    }
 }
