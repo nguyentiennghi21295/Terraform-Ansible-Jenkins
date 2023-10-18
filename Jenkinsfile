@@ -60,7 +60,7 @@ pipeline {
         }
         stage('Ansible') {
             steps {
-                sh 'ansible-playbook Playbooks/main-playbook.yml -i aws_hosts --private-key /home/ubuntu/.ssh/mtckey'
+                sh 'ansible-playbook Playbooks/main-playbook.yml -i aws_hosts --key-file /home/ubuntu/.ssh/mtckey'
             }
         }
         stage('Validate Destroy') {
