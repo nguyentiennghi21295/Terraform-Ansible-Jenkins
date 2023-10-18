@@ -11,6 +11,15 @@ sudo systemctl status jenkins
 
         stage('Ansible') {
             steps{
-                ansiblePlaybook(credentialsId: 'ec2-ssh-key', inventory: 'aws_hosts', playbook: 'Playbooks/main-playbook.yml')
+                ansiblePlaybook(credentialsId: 'ec2-ssh-keyv2', inventory: 'aws_hosts', playbook: 'Playbooks/main-playbook.yml')
             }
+    
+    
+        post {
+        success {
+            echo 'Success!'
         }
+        failure {
+            sh 'terraform destroy -auto-approve -no-color'
+        }
+    }
