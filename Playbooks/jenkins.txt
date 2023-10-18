@@ -23,3 +23,5 @@ sudo systemctl status jenkins
             sh 'terraform destroy -auto-approve -no-color'
         }
     }
+    
+                    sh 'cat $BRANCH_NAME.tfvars'
