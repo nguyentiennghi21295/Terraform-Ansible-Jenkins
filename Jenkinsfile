@@ -33,7 +33,7 @@ pipeline {
         }
         stage('Ansible') {
             steps {
-                sh 'ansible-playbook Playbooks/main-playbook.yml -i aws_hosts --private-key ~/.ssh/mtckey'
+                sh 'ansible-playbook Playbooks/main-playbook.yml -i aws_hosts --private-key /home/ubuntu/.ssh/mtckey'
             }
         }    
         stage('Destroy') {
